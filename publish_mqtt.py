@@ -1,4 +1,5 @@
 import json
+import os
 import time
 from typing import Dict, Any
 
@@ -19,6 +20,10 @@ MQTT_CLIENT_ID = "google_find_my_publisher"
 # Home Assistant MQTT Discovery
 DISCOVERY_PREFIX = "homeassistant"
 DEVICE_PREFIX = "google_find_my"
+
+# Device ignore list, comma seperated string of device IDs
+IGNORE_DEVICES: str = os.environ.get("IGNORE_DEVICES", "")
+
 
 def on_connect(client, userdata, flags, result_code, properties):
     """Callback when connected to MQTT broker"""
@@ -98,22 +103,27 @@ def main():
         canonic_ids = get_canonic_ids(device_list)
 
         print(f"Found {len(canonic_ids)} devices")
-        
+
         # Publish discovery config and state for each device
         for device_name, canonic_id in canonic_ids:
-            print(f"Processing device: {device_name}")
-            
-            # Publish discovery configuration
-            msg_info = publish_device_config(client, device_name, canonic_id)
-            msg_info.wait_for_publish()
-            
-            # Get and publish location data
-            location_data = get_location_data_for_device(canonic_id, device_name)
-            msg_info = publish_device_state(client, device_name, canonic_id, location_data)
-            msg_info.wait_for_publish()
+            if canonic_id in IGNORE_DEVICES:
+                print(f"Ignoring device: {device_name}")
+            else:
+                print(f"Processing device: {device_name}")
 
-            print(f"Published data for {device_name}")
-            
+                # Publish discovery configuration
+                msg_info = publish_device_config(client, device_name, canonic_id)
+                msg_info.wait_for_publish()
+
+                # Get and publish location data
+                location_data = get_location_data_for_device(canonic_id, device_name)
+                msg_info = publish_device_state(
+                    client, device_name, canonic_id, location_data
+                )
+                msg_info.wait_for_publish()
+
+                print(f"Published data for {device_name}")
+
         print("\nAll devices have been published to MQTT")
         print("Devices will now be discoverable in Home Assistant")
         print("You may need to restart Home Assistant or trigger device discovery")
