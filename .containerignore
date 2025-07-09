@@ -1,0 +1,16 @@
+CITATION.cff
+Containerfile
+.containerignore
+DULT
+ESP32Firmware
+.git
+.github
+.gitignore
+LICENSE
+main.py
+.mise.local.toml
+__pycache__
+README.md
+requirements-cron.txt
+.venv
+ZephyrFirmware

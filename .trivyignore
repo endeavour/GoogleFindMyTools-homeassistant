@@ -1,0 +1,2 @@
+# Ignore Containerfile finding (LOW): Add HEALTHCHECK instruction in your Dockerfile
+AVD-DS-0026
