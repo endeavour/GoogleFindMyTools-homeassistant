@@ -160,7 +160,7 @@ Für einen Aufbau habe ich einen Raspberry 2 b verwendet und dort Raspberry OS B
 sudo apt install chromium-browser
 ```
 ```
-sudo apt install chromium-browser
+sudo apt install chromium-chromedriver
 ```
 Es es klappt kann man sich über die UI im Chromebrowser anmelden. Falls nicht  "requstest url was not found on this server", muss man die  secrets.json von windows später zum Raspberry kopieren
 
