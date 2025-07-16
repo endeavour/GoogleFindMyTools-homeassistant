@@ -18,6 +18,13 @@ Im Chromebrowser mit dem Nutzkonto einloggen. Wichtig: hiermit ist nicht die web
 
 PowerShell als Admin ausführen und GoogleFindMyTools von leonboe1 installieren
 ```
+sudo apt install systemd-networkd-wait-online
+```
+```
+sudo systemctl enable systemd-networkd-wait-online.service
+```
+
+```
 git clone https://github.com/leonboe1/GoogleFindMyTools
 ```
 ```
@@ -239,7 +246,7 @@ import subprocess
 import datetime
 import json
 
-MQTT_BROKER = "192.168.1100"
+MQTT_BROKER = "192.168.100"
 MQTT_PORT = 1883
 MQTT_TOPIC = "googlefindmytools/trigger/update"
 MQTT_USER = "mqttuser"
@@ -307,5 +314,69 @@ client.loop_forever()
 ```
 
 Drücke STG+X, dann Y und Enter
+
+```
+chmod +x mqtt_listener.py
+```
+hiermit kann man den listener testen
+```
+python3 ~/mqtt_listener.py
+```
+
+<br><br><br>
+Abschließend müssen wir noch den Listener Service erstellen
+```
+sudo nano /etc/systemd/system/mqtt_listener.service
+```
+hier muss folgendes hineinkopiert werden:
+```
+
+[Unit]
+Description=MQTT Listener for Google Find My Tools
+Wants=network-online.target
+After=network.target
+#After=network-online.target
+
+
+[Service]
+ExecStart=/home/admin/GoogleFindMyTools/venv/bin/python /home/admin/mqtt_listener.py
+WorkingDirectory=/home/admin
+StandardOutput=journal
+StandardError=journal
+Restart=always
+User=admin
+Environment="PATH=/home/admin/GoogleFindMyTools/venv/bin"
+
+[Install]
+WantedBy=multi-user.target
+```
+Drücke STG+X, dann Y und Enter
+```
+sudo systemctl daemon-reexec
+```
+```
+sudo systemctl daemon-reload
+```
+```
+sudo systemctl enable mqtt_listener.service
+```
+```
+sudo systemctl start mqtt_listener.service
+```
+listener Service testen:
+```
+sudo systemctl status mqtt_listener.service
+```
+```
+journalctl -u mqtt_listener.service -f
+```
+<br><br><br><br>
+wenn man sich später die kommunikation mit HA anschauen möchte:
+```
+cd /home/admin
+source ~/GoogleFindMyTools/venv/bin/activate
+python3 ~/mqtt_listener.py
+```
+Str + c zum beenden
 
 
