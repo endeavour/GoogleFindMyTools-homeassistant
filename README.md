@@ -41,7 +41,10 @@ pip install -r requirements.txt
 ```
 python main.py```
 ```
-
+<br>
+<br>
+<br>
+<br>
 Es könnte nun der Fehler "undetected_chromedriver" kommen. In diesem Fall muss der Chromedriver separat installiert werden
 
 Zuerst muss man die Chrome Version herausfinden: Öffne Chrome  und gib  chrome://settings/help in die Adresszeile ein. Notiere die Version, z.B. 114.0.5735.199 
@@ -127,3 +130,17 @@ def create_driver():
 ```
 
 Hierdurch wird unser neuer Chromedriver verwendet und Chrome in Debug modus geöffnet. Melde dich dort im Chorme mit deinem Google Profil noch einmal an (wichtig: nicht die Website sondern im Chrome). Schließe alle Browser Fenster 
+
+gebe nun 
+```
+& "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --user-data-dir="C:\ChromeDebugTemp"
+```
+in powershell ein und führe 
+```
+python main.py```
+```
+noch einmal aus. Nun sollte es funktionieren
+
+
+
+
