@@ -380,3 +380,32 @@ python3 ~/mqtt_listener.py
 Str + c zum beenden
 
 
+# Home Assistant
+Abschnließend müssen wir noch den Broker in Home Assistant installieren
+
+In der configuration.yaml
+```
+mqtt:
+```
+hinzufügen
+
+Als nächstes müssen wir einen neuen User zu HA hinzufügen. 
+Einstellungen/Personen/Benutzer hinzufügen
+Dieser Username und Passwort muss mit dem übereinstimmen, was wir oben im Raspberry bereits hinterlegt haben.
+
+
+Nun installieren wir den Mqqt Broker:
+In Home Assistant Einstellungen/ Geräte&Dienste Integration hinzufügen drücken und nach Mqtt suchen und installieren und das offizielle Mqqt auswählen (nicht das manuelle mit den Benutzerdetails) 
+
+Nun richten wir den Broker ein:
+Einstellungen/ Geräte&Dienste / MQTT
+
+Dort gibt es nun einen Integrationseintrag: "Mosquitto Mqtt Broker". Dort gehen wir auf die drei Punkte und wählen "Neu konfigueren" aus.
+Folgendes geben wir ein:
+Server: core-mosquitto
+Port: 1883
+Benutzername: Dein User den du beim Raspberry verwendet hast in der mqtt_listener.py und in der publish_mqtt.py
+Passwort: Dein Passwort das du beim Raspberry verwendet hast in der mqtt_listener.py und in der publish_mqtt.py
+
+
+
