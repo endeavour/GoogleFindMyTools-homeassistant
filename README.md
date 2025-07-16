@@ -139,7 +139,10 @@ in powershell ein und führe
 ```
 python main.py
 ```
-noch einmal aus. Nun sollte es funktionieren
+noch einmal aus. Nun sollte es funktionieren. 
+
+
+PowerShell lassen wir geöffnet und richten nun den Raspberry ein.
 
 
 
@@ -175,6 +178,14 @@ pip install -r requirements.txt
 python3 main.py
 ```
 oder ```python main.py```
+
+
+hier wird nun ein Fehler wegen der Zugangsdaten von Chrome Browser kommen. Daher gehen wir wieder in Powershell und übertragen nun die Zugangsdaten von Windows zum Raspberry.
+In PowerShell folgenes eintrippen:
+```
+scp Auth\secrets.json admin@raspberrypi.local:~/GoogleFindMyTools/Auth/
+```
+ggf. muss hier admin durch den User und raspberry durch den Gerätenamen im oben link ersetzt werden.
 
 
 
