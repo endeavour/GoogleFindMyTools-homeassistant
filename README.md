@@ -50,3 +50,80 @@ Nun muss man den passenden ChromeDriver herunterladen: https://googlechromelabs.
 Entpacke die datei chromedriver.exe nach C:\Tools\chromedriver\<br>
 Nun müssen wir noch den dateipfad anpassen, damit GoogleFindMyTools weiß wo dieser liegt. 
 
+Gehe unter C:\WINDOWS\system32\GoogleFindMyTools\chrome_driver.py und öffne die Datei als Admin
+
+
+wir müssen folgenden Block
+```
+def create_driver():
+    """Create a Chrome WebDriver with undetected_chromedriver."""
+
+    try:
+        chrome_options = get_options()
+        driver = uc.Chrome(options=chrome_options)
+        print("[ChromeDriver] Installed and browser started.")
+        return driver
+    except Exception:
+        print("[ChromeDriver] Default ChromeDriver creation failed. Trying alternative paths...")
+
+        chrome_path = find_chrome()
+        if chrome_path:
+            chrome_options = get_options()
+            chrome_options.binary_location = chrome_path
+            try:
+                driver = uc.Chrome(options=chrome_options)
+                print(f"[ChromeDriver] ChromeDriver started using {chrome_path}")
+                return driver
+            except Exception as e:
+                print(f"[ChromeDriver] ChromeDriver failed using path {chrome_path}: {e}")
+        else:
+            print("[ChromeDriver] No Chrome executable found in known paths.")
+
+        raise Exception(
+            "[ChromeDriver] Failed to install ChromeDriver. A current version of Chrome was not detected on your system.\n"
+            "If you know that Chrome is installed, update Chrome to the latest version. If the script is still not working, "
+            "set the path to your Chrome executable manually inside the script."
+        )
+```
+
+durch diesen ersetzten
+
+```
+def create_driver():
+    """Create a Chrome WebDriver with undetected_chromedriver."""
+
+    try:
+        chrome_options = get_options()
+        driver = uc.Chrome(options=chrome_options)
+        print("[ChromeDriver] Installed and browser started.")
+        return driver
+    except Exception:
+        print("[ChromeDriver] Default ChromeDriver creation failed. Trying alternative paths...")
+
+        chrome_path = find_chrome()
+        if chrome_path:
+            chrome_options = get_options()
+            #chrome_options.binary_location = chrome_path
+            chrome_options.debugger_address = "127.0.0.1:9222"
+            try:
+                #driver = uc.Chrome(options=chrome_options)
+                driver = uc.Chrome(
+                    options=chrome_options,
+                    driver_executable_path="C:\\Tools\\chromedriver\\chromedriver.exe",
+                    use_subprocess=False
+                )
+                print(f"[ChromeDriver] ChromeDriver started using {chrome_path}")
+                return driver
+            except Exception as e:
+                print(f"[ChromeDriver] ChromeDriver failed using path {chrome_path}: {e}")
+        else:
+            print("[ChromeDriver] No Chrome executable found in known paths.")
+
+        raise Exception(
+            "[ChromeDriver] Failed to install ChromeDriver. A current version of Chrome was not detected on your system.\n"
+            "If you know that Chrome is installed, update Chrome to the latest version. If the script is still not working, "
+            "set the path to your Chrome executable manually inside the script."
+        )
+```
+
+Hierdurch wird unser neuer Chromedriver verwendet und Chrome in Debug modus geöffnet. Melde dich dort im Chorme mit deinem Google Profil noch einmal an (wichtig: nicht die Website sondern im Chrome). Schließe alle Browser Fenster 
