@@ -16,10 +16,10 @@ from NovaApi.ExecuteAction.LocateTracker.location_request import get_location_da
 from ProtoDecoders.decoder import parse_device_list_protobuf, get_canonic_ids
 
 # MQTT Configuration
-MQTT_BROKER = "192.168.3.65"  # Change this to your MQTT broker address
+MQTT_BROKER = "192.168.1.100"  # Change this to your MQTT broker address
 MQTT_PORT = 1883
-MQTT_USERNAME = "mqttuser"  # Set your MQTT username if required
-MQTT_PASSWORD = "Coconuts1990"  # Set your MQTT password if required
+MQTT_USERNAME = "DeinMqttUser"  # Set your MQTT username if required
+MQTT_PASSWORD = "DeinMqttPassword"  # Set your MQTT password if required
 lat_home = 0 #48.8909528  # DEIN Zuhause-Breitengrad
 lon_home = 0 #9.1904316   # DEIN Zuhause-Längengrad
 home_cycle = 0 #200 # Umkreis der Homezone in [m]
