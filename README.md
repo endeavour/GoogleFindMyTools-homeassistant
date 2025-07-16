@@ -188,7 +188,18 @@ scp Auth\secrets.json admin@raspberrypi.local:~/GoogleFindMyTools/Auth/
 ggf. muss hier admin durch den User und raspberry durch den Gerätenamen im oben link ersetzt werden.
 
 
+<br><br>
+nun müssen wir die Daten vom Mqtt Brocker eintragen. Daher wieder in Putty die publish_mqtt.py auf dem Raspberry öffenen
+```
+nano publish_mqtt.py
+```
+und folgende Felder anpassten:
 
+
+>MQTT_BROKER = "192.168.1.100"  # Ändere die IP zu der von Home Assistant
+MQTT_PORT = 1883
+MQTT_USERNAME = "mqttuser"  # Ändere einen Usernamen
+MQTT_PASSWORD = "password"  # Ändere dein Passwort
 
 
 
