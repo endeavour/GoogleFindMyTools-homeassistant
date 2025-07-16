@@ -137,9 +137,46 @@ gebe nun
 ```
 in powershell ein und führe 
 ```
-python main.py```
+python main.py
 ```
 noch einmal aus. Nun sollte es funktionieren
+
+
+
+## Installation Raspberry:
+Für einen Aufbau habe ich einen Raspberry 2 b verwendet und dort Raspberry OS Bookworm verwendet. Die Verbindung kann man mit Putty (Port 22) von Windows zum Raspberry herstellen. Anschließend mit User und Passwort anmelden. 
+
+```
+sudo apt install chromium-browser
+```
+```
+sudo apt install chromium-browser
+```
+Es es klappt kann man sich über die UI im Chromebrowser anmelden. Falls nicht  "requstest url was not found on this server", muss man die  secrets.json von windows später zum Raspberry kopieren
+
+
+Installieren wir nun GoogleFindMyTools
+```
+git clone https://github.com/xHecktor/GoogleFindMyTools-homeassistant.git ~/GoogleFindMyTools
+```
+```
+cd ~/GoogleFindMyTools
+```
+```
+python3 -m venv venv
+```
+```
+source venv/bin/activate
+```
+```
+```
+```
+v
+```
+
+
+
+
 
 
 
