@@ -17,12 +17,7 @@ Python installieren: https://www.python.org/downloads/windows/
 Im Chromebrowser mit dem Nutzkonto einloggen. Wichtig: hiermit ist nicht die website von google.com gemeint, sondern das Chrome Desktop Programm!
 
 PowerShell als Admin ausführen und GoogleFindMyTools von leonboe1 installieren
-```
-sudo apt install systemd-networkd-wait-online
-```
-```
-sudo systemctl enable systemd-networkd-wait-online.service
-```
+
 
 ```
 git clone https://github.com/leonboe1/GoogleFindMyTools
@@ -164,6 +159,12 @@ sudo apt install chromium-chromedriver
 ```
 Es es klappt kann man sich über die UI im Chromebrowser anmelden. Falls nicht  "requstest url was not found on this server", muss man die  secrets.json von windows später zum Raspberry kopieren
 
+```
+sudo apt install systemd-networkd-wait-online
+```
+```
+sudo systemctl enable systemd-networkd-wait-online.service
+```
 
 Installieren wir nun GoogleFindMyTools
 ```
