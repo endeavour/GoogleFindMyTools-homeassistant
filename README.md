@@ -7,6 +7,8 @@ Dieser Fork von GoogleFindMyTools ist für den Betrieb auf Raspberry OS gedacht,
 Da Google Find my Device entweder einen Standort in Koordinatenform oder einen String "home" bzw. "zuhause", wurde die publish_mqqt.py angepasst. Falls google nun den string zuhause sendet, ersetzt der Raspbbery diesen durch Koordinaten für die Home Zone.
 Der Aufruf zum aktualisieren des Standortes erfolgt über Home Assisant via mqtt. In diesem sind die Kooardinaten für die Homezone (Koordinaten + Radius) enthalten.
 
+Die Home Zone (Koordinaten + Umkreis) sind nötig, da Home Assistant immer einen Status zur Übermittlung der Attribute (Koordinaten) benötigt. Vorher hat die publisch_mqtt.py immer unkown als Status gesendet und die Koordinaten als Attribute. Die folge war, das home assistent den tracker bei jeder Standort aktualisierung auf unkown gesetzt hat und dann die Attribute ausliest, um dann wieder "home" als status zu setzten. Mit dieser Änderung wird direkt der richtige status an home Assistent gesendet. 
+
 Da der Chrome Browser auf dem Raspberry beim "requstest url was not found on this server" meldet, kann man sich dort nicht einloggen. Man muss daher GoogleFindMyTools auf einem Windows PC installieren, sich einloggen und die secrets.json mit den Zugangsdaten von dem PC auf den Raspberry kopieren. Daher ist die Anleitung in drei Schritte aufgeteilt: Installation auf dem  Windows PC, installation auf dem Raspberry OS und anschließend die Mqqt Verbindung zu Home Assistant.
 
 ## Installation Windows PC:
