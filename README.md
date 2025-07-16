@@ -1,8 +1,8 @@
-# GoogleFindMyTools Home Assistant
+# GoogleFindMyTools (Raspberry) Home Assistant
 
-This is a fork of https://github.com/leonboe1/GoogleFindMyTools
+Dies ist ein fork of https://github.com/endeavour/GoogleFindMyTools-homeassistant
 
-It includes a new script, publish_mqtt.py that will publish the location of all your devices to an MQTT broker. These devices are then discoverable by home assistant and you can display them on a map, make automations etc.
-
-Just run this script on a cronjob every so often to keep things up to date.
+Dieser Fork von GoogleFindMyTools ist für den Betrieb auf Raspberry OS gedacht, da es dort ansonsten Probleme mit Chromeium und dem login in Chrome gibt. Die Kommunikation findet über Mqqt zu Home Assistant (Mqqt Brocker) statt.
+Da Google Find my Device entweder einen Standort in Koordinatenform oder einen String "home" bzw. "zuhause", wurde die publish_mqqt.py angepasst. Falls google nun den string zuhause sendet, ersetzt der Raspbbery diesen durch Koordinaten für die Home Zone.
+Der Aufruf zum aktualisieren des Standortes erfolgt über Home Assisant via mqtt. In diesem sind die Kooardinaten für die Homezone (Koordinaten + Radius) enthalten.
 
