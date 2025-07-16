@@ -14,42 +14,38 @@ Da der Chrome Browser auf dem Raspberry beim "requstest url was not found on thi
 git installieren:  https://git-scm.com/download/win <br>
 Python installieren: https://www.python.org/downloads/windows/
 
+Im Chromebrowser mit dem Nutzkonto einloggen. Wichtig: hiermit ist nicht die website von google.com gemeint, sondern das Chrome Desktop Programm!
 
 PowerShell als Admin ausführen und GoogleFindMyTools von leonboe1 installieren
 ```
 git clone https://github.com/leonboe1/GoogleFindMyTools
 ```
-
-
 ```
 python -m venv venv
 ```
 falls dass nicht geht ```& "C:\Users\[USER]\AppData\Local\Programs\Python\Python313\python.exe" -m venv venv``` 
-hier bei muss [USER] durch den PC User ersetzt werden bzw. wo auch immer wurde  <br>
-<br><br><br>
-
-
+hier bei muss [USER] durch den PC User ersetzt werden bzw. wo auch immer wurde 
 ```
 venv\Scripts\activate
 ```
-alternativ
-```
-.\venv\Scripts\Activate.ps1
-```
-<br>
-
-
+alternativ ```.\venv\Scripts\Activate.ps1```
 ```
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
 ```
-
-
-
-
-venv\Scripts\activate
-
-
-
+```
+cd GoogleFindMyTools
+```
+```
+pip install -r requirements.txt
+```
+```
+python main.py```
 ```
 
-```
+Es könnte nun der Fehler "undetected_chromedriver" kommen. In diesem Fall muss der Chromedriver separat installiert werden
+
+Zuerst muss man die Chrome Version herausfinden: Öffne Chrome  und gib  chrome://settings/help in die Adresszeile ein. Notiere die Version, z.B. 114.0.5735.199 
+Nun muss man den passenden ChromeDriver herunterladen: https://googlechromelabs.github.io/chrome-for-testing/. Wenn die erste Zahl z.B. 144 der Versionnummer übereinstimmt, reicht das.
+
+
+
