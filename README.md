@@ -47,5 +47,6 @@ Es könnte nun der Fehler "undetected_chromedriver" kommen. In diesem Fall muss 
 Zuerst muss man die Chrome Version herausfinden: Öffne Chrome  und gib  chrome://settings/help in die Adresszeile ein. Notiere die Version, z.B. 114.0.5735.199 
 Nun muss man den passenden ChromeDriver herunterladen: https://googlechromelabs.github.io/chrome-for-testing/. Wenn die erste Zahl z.B. 144 der Versionnummer übereinstimmt, reicht das.
 
-
+Entpacke die datei chromedriver.exe nach C:\Tools\chromedriver\<br>
+Nun müssen wir noch den dateipfad anpassen, damit GoogleFindMyTools weiß wo dieser liegt. 
 
