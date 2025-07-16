@@ -407,5 +407,45 @@ Port: 1883<br>
 Benutzername: Dein User den du beim Raspberry verwendet hast in der mqtt_listener.py und in der publish_mqtt.py<br>
 Passwort: Dein Passwort das du beim Raspberry verwendet hast in der mqtt_listener.py und in der publish_mqtt.py<br>
 
+<br><br><br><br>
+Nun erstellen wir den Aufruf zum Orten der Google Tags
+Einstellungen/Automatisierungen&Szenen/Skripte/ Neues Skript hinzufügen
+
+
+Hier kannst du die Koordinaten und den Umkreis von deinem Zuhause definieren. Wenn nun der Google Tag anstatt von Koordinaten nur "Zuhause" meldet, wird dieses in Koordinaten umgewandelt, damit Home Assisant den Tracker anzeigen kann. 
+```
+alias: Google Tracker aktualisieren
+sequence:
+  - data:
+      topic: googlefindmytools/trigger/update
+      payload: "{ \"lat_home\": 31.8909528, \"lon_home\": 7.1904316, \"home_radius\": 500 }"
+    action: mqtt.publish
+```
+speichern und ausführen. Die Google Tags sollten nun in Home Assistan angezeigt werden. 
+
+Zuletzt legen wir noch eine Automatisierung ab, um den Standort alle 15 min zu aktualisieren:
+Einstellungen/Automatisierungen&Szenen/ Automatisierung erstellen
+
+```
+alias: Google_Airtag
+description: ""
+triggers:
+  - trigger: time_pattern
+    minutes: /15
+conditions: []
+actions:
+  - action: script.update_google_locations
+    metadata: {}
+    data: {}
+mode: single
+```
+speichern
+
+
+
+So fertig sind wir
+
+
+
 
 
