@@ -249,8 +249,8 @@ import json
 MQTT_BROKER = "192.168.100"
 MQTT_PORT = 1883
 MQTT_TOPIC = "googlefindmytools/trigger/update"
-MQTT_USER = "mqttuser"
-MQTT_PASS = "password"
+MQTT_USER = "DeinMqqtUser"
+MQTT_PASS = "DeinMqttPasswort"
 
 def on_connect(client, userdata, flags, rc, properties=None):
         print("Connected with result code " + str(rc))
@@ -391,7 +391,7 @@ hinzufügen
 
 Als nächstes müssen wir einen neuen User zu HA hinzufügen. <br>
 Einstellungen/Personen/Benutzer hinzufügen<br>
-Dieser Username und Passwort muss mit dem übereinstimmen, was wir oben im Raspberry bereits hinterlegt haben.<br>
+Dieser DeinMqqtUser und DeinMqqtPasswort muss mit dem übereinstimmen, was wir oben im Raspberry bereits hinterlegt haben.<br>
 
 
 Nun installieren wir den Mqqt Broker:<br>
@@ -404,8 +404,8 @@ Dort gibt es nun einen Integrationseintrag: "Mosquitto Mqtt Broker". Dort gehen 
 Folgendes geben wir ein:<br>
 Server: core-mosquitto<br>
 Port: 1883<br>
-Benutzername: Dein User den du beim Raspberry verwendet hast in der mqtt_listener.py und in der publish_mqtt.py<br>
-Passwort: Dein Passwort das du beim Raspberry verwendet hast in der mqtt_listener.py und in der publish_mqtt.py<br>
+Benutzername: DeinMqqtUser den du beim Raspberry verwendet hast in der mqtt_listener.py und in der publish_mqtt.py<br>
+Passwort: DeinMqttPasswort das du beim Raspberry verwendet hast in der mqtt_listener.py und in der publish_mqtt.py<br>
 
 <br><br><br><br>
 Nun erstellen wir den Aufruf zum Orten der Google Tags
