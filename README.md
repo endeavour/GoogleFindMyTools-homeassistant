@@ -205,8 +205,8 @@ und folgende Felder anpassten:
 ```
 MQTT_BROKER = "192.168.1.100"  # Ändere die IP zu der von Home Assistant
 MQTT_PORT = 1883
-MQTT_USERNAME = "mqttuser"  # Ändere einen Usernamen
-MQTT_PASSWORD = "password"  # Ändere dein Passwort
+MQTT_USERNAME = "DeinMqttUser"  # Ändere einen Usernamen
+MQTT_PASSWORD = "DeinMqttPasswort"  # Ändere dein Passwort
 ```
 Drücke STG+X, dann Y und Enter
 
