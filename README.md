@@ -331,7 +331,7 @@ Abschließend müssen wir noch den Listener Service erstellen
 ```
 sudo nano /etc/systemd/system/mqtt_listener.service
 ```
-hier muss folgendes hineinkopiert werden:
+hier muss folgendes hineinkopiert werden (Achtung User Verzeichnis anpassen, hier admin):
 ```
 
 [Unit]
