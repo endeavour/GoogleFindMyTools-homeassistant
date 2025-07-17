@@ -346,7 +346,8 @@ ExecStart=/home/admin/GoogleFindMyTools/venv/bin/python /home/admin/mqtt_listene
 WorkingDirectory=/home/admin
 StandardOutput=journal
 StandardError=journal
-Restart=always
+#Restart=always
+Restart=on-failure
 User=admin
 Environment="PATH=/home/admin/GoogleFindMyTools/venv/bin"
 
