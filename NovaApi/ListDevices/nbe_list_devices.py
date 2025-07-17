@@ -1,8 +1,3 @@
-#
-#  GoogleFindMyTools - A set of tools to interact with the Google Find My API
-#  Copyright © 2024 Leon Böttger. All rights reserved.
-#
-
 import binascii
 from NovaApi.ExecuteAction.LocateTracker.location_request import get_location_data_for_device
 from NovaApi.nova_request import nova_request
@@ -15,10 +10,8 @@ from SpotApi.UploadPrecomputedPublicKeyIds.upload_precomputed_public_key_ids imp
 
 
 def request_device_list():
-
     hex_payload = create_device_list_request()
     result = nova_request(NOVA_LIST_DEVICS_API_SCOPE, hex_payload)
-
     return result
 
 
@@ -56,20 +49,12 @@ def list_devices():
     print("")
     print("The following trackers are available:")
 
+    # Anstatt Eingabeaufforderung, jedes Gerät automatisch durchlaufen
     for idx, (device_name, canonic_id) in enumerate(canonic_ids, start=1):
         print(f"{idx}. {device_name}: {canonic_id}")
 
-    selected_value = input("\nIf you want to see locations of a tracker, type the number of the tracker and press 'Enter'.\nIf you want to register a new ESP32- or Zephyr-based tracker, type 'r' and press 'Enter': ")
-
-    if selected_value == 'r':
-        print("Loading...")
-        register_esp32()
-    else:
-        selected_idx = int(selected_value) - 1
-        selected_device_name = canonic_ids[selected_idx][0]
-        selected_canonic_id = canonic_ids[selected_idx][1]
-
-        get_location_data_for_device(selected_canonic_id, selected_device_name)
+        # Automatisch den Standort jedes Geräts abfragen
+        get_location_data_for_device(canonic_id, device_name)
 
 
 if __name__ == '__main__':
