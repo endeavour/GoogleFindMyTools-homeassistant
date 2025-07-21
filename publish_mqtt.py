@@ -9,6 +9,7 @@ import json
 import time
 from typing import Dict, Any
 
+#from publish_mqtt import current_home_config
 from math import radians, cos, sin, asin, sqrt
 import paho.mqtt.client as mqtt
 from NovaApi.ListDevices.nbe_list_devices import request_device_list
@@ -107,67 +108,52 @@ def publish_device_config(client: mqtt.Client, device_name: str, canonic_id: str
     r = client.publish(f"{base_topic}/config", json.dumps(config), retain=True)
     return r
 
-def publish_device_state(client: mqtt.Client, device_name: str, canonic_id: str, location_data: Dict) -> None:
-    """Publish device state and attributes to MQTT"""
-    base_topic = f"{DISCOVERY_PREFIX}/device_tracker/{DEVICE_PREFIX}_{canonic_id}"
+def publish_device_state(client, name, cid, location_data):
+    # 1) Hole Home‑Zone
+    lat_home = current_home_config["lat_home"]
+    lon_home = current_home_config["lon_home"]
+    home_radius = current_home_config["home_radius"]
 
-    # Extract location data
-    lat = location_data.get('latitude')
-    lon = location_data.get('longitude')
-    accuracy = location_data.get('accuracy')
-    altitude = location_data.get('altitude')
-    timestamp = location_data.get('timestamp', time.time())
+    # 2) Versuche GPS‑Koordinaten
+    lat = location_data.get("latitude")
+    lon = location_data.get("longitude")
+    sem = location_data.get("semantic_location")
 
-    if (lat is None or lon is None) and location_data.get("semantic_location") == "Zuhause":
-        #lat = lat_home
-        #lon = lon_home
-        lat = current_home_config["lat_home"]
-        lon = current_home_config["lon_home"]
-
-        print(f"[Fallback] Semantische Position erkannt: '{location_data.get('semantic_location', 'Unbekannt')}' → Fallback-Koordinaten werden verwendet.")
-        print(f"[Fallback] Semantische Position erkannt: 'Zuhause' → Fallback-Koordinaten werden verwendet.")
-
-
-    # Publish state (home/not_home/unknown)
-    state = "unknown"
-
+    # 3) State‑Ermittlung
     if lat is not None and lon is not None:
+        dist = calculate_distance(lat_home, lon_home, lat, lon)
+        state = "home" if dist < home_radius else "not_home"
 
-        lat_home_cfg = current_home_config["lat_home"]
-        lon_home_cfg = current_home_config["lon_home"]
-        home_radius_cfg = current_home_config["home_radius"]
-
-        dist = calculate_distance(lat_home_cfg, lon_home_cfg, lat, lon)
-        if dist < home_radius_cfg:
+    elif sem:
+        # Fallback: semantischer Raum → immer Home‑Koordinaten
+        lat, lon = lat_home, lon_home
+        if sem.lower() == "zuhause":
             state = "home"
         else:
-            state = "not_home"
-    elif location_data.get("semantic_location") == "Zuhause":
-        lat = lat_home_cfg
-        lon = lon_home_cfg
-        state = "home"
-        print(f"[Fallback] Semantische Position erkannt: '{location_data.get('semantic_location')}' → Fallback-Koordinaten werden verwendet.")
+            state = sem  # z.B. "Arbeitszimmer"
+        print(f"[Fallback] Semantische Position erkannt: '{sem}' → Fallback-Koordinaten werden verwendet.")
+
     else:
-        state = "unkown"
+        # keinerlei Info
+        state = "unknown"
 
-
-
-
-    client.publish(f"{base_topic}/state", state)
-
-    # Publish attributes
-    attributes = {
-        "latitude": lat,
-        "longitude": lon,
-        "altitude": altitude,
-        "gps_accuracy": accuracy,
-        "source_type": "gps",
-        "last_updated": timestamp,
-        "semantic_location": location_data.get("semantic_location")
-
+    # 4) Attribute‑Payload
+    attrs = {
+        "latitude":          lat,
+        "longitude":         lon,
+        "altitude":          location_data.get("altitude"),
+        "gps_accuracy":      location_data.get("accuracy"),
+        "source_type":       "gps" if location_data.get("latitude") is not None else "semantic",
+        "last_updated":      location_data.get("timestamp"),
+        "semantic_location": sem
     }
-    r = client.publish(f"{base_topic}/attributes", json.dumps(attributes))
-    return r
+
+    # 5) Publish
+    topic_state = f"homeassistant/device_tracker/google_find_my_{cid}/state"
+    topic_attr  = f"homeassistant/device_tracker/google_find_my_{cid}/attributes"
+
+    client.publish(topic_state, state, retain=True)
+    client.publish(topic_attr,  json.dumps(attrs), retain=True)
 
 def main():
     # Initialize MQTT client
@@ -289,3 +275,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
