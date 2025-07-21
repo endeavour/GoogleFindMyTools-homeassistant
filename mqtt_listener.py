@@ -20,10 +20,10 @@ from NovaApi.ExecuteAction.LocateTracker.location_request import get_location_da
 from ProtoDecoders.decoder import parse_device_list_protobuf, get_canonic_ids
 
 # MQTT Configuration
-MQTT_BROKER = "192.168.3.65"
+MQTT_BROKER = "192.168.1.100"  # Change this to your MQTT broker address
 MQTT_PORT = 1883
-MQTT_USERNAME = "mqttuser"
-MQTT_PASSWORD = "Coconuts1990"
+MQTT_USERNAME = "DeinMqttUser"  # Set your MQTT username if required
+MQTT_PASSWORD = "DeinMqttPassword"  # Set your MQTT password if required
 
 # Home zone defaults
 lat_home = 0  # placeholder until config arrives
