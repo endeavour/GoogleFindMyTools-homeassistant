@@ -25,6 +25,12 @@ PowerShell als Admin ausführen und GoogleFindMyTools von leonboe1 installieren
 git clone https://github.com/leonboe1/GoogleFindMyTools
 ```
 ```
+cd GoogleFindMyTools
+```
+```
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
+```
+```
 python -m venv venv
 ```
 falls dass nicht geht ```& "C:\Users\[USER]\AppData\Local\Programs\Python\Python313\python.exe" -m venv venv``` 
@@ -33,9 +39,7 @@ hier bei muss [USER] durch den PC User ersetzt werden bzw. wo auch immer wurde
 venv\Scripts\activate
 ```
 alternativ ```.\venv\Scripts\Activate.ps1```
-```
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
-```
+
 ```
 cd GoogleFindMyTools
 ```
@@ -43,7 +47,7 @@ cd GoogleFindMyTools
 pip install -r requirements.txt
 ```
 ```
-python main.py```
+python main.py
 ```
 <br>
 <br>
