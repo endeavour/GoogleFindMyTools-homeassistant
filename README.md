@@ -319,7 +319,7 @@ watchdog-device = /dev/watchdog
 max-load-1 = 24
 temperature-device = /sys/class/thermal/thermal_zone0/temp
 max-temperature = 75000
-```
+
 ```
 
 
