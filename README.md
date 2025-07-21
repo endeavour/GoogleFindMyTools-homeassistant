@@ -217,106 +217,19 @@ MQTT_PASSWORD = "DeinMqttPasswort"  # Ändere dein Passwort
 ```
 Drücke STG+X, dann Y und Enter
 
-Nun richten wir einen Autstart ein
-```
-cd /home/admin
-```
-```
-nano update_location.sh
-```
-und dort folgendes einfügen:
-```
-#!/bin/bash
-cd /home/admin/GoogleFindMyTools
-source venv/bin/activate
-python3 publish_mqtt.py
-```
-Drücke STG+X, dann Y und Enter
-```
-chmod +x update_location.sh
-```
-Ausführung testen: 
-```
-./update_location.sh
-```
-
 <br><br><br>
-Nun erstellen wir noch einen Listener, um die Trigger von Home Assistant zu empfangen:
+Auch die Zugangsdaten vom LIstener anpassen, um die Trigger von Home Assistant zu empfangen:
 ```
 nano mqtt_listener.py
 ```
 hier müssen auch wieder die Zugangsdaten des Mqtt Brockers angepasst werden
 
 ```
-import paho.mqtt.client as mqtt
-import subprocess
-import datetime
-import json
-
 MQTT_BROKER = "192.168.100"
 MQTT_PORT = 1883
 MQTT_TOPIC = "googlefindmytools/trigger/update"
 MQTT_USER = "DeinMqqtUser"
 MQTT_PASS = "DeinMqttPasswort"
-
-def on_connect(client, userdata, flags, rc, properties=None):
-        print("Connected with result code " + str(rc))
-        client.subscribe(MQTT_TOPIC)
-
-def on_message(client, userdata, msg):
-    print(f"Received trigger: {msg.payload.decode()}")
-
-    try:
-        # JSON laden
-        payload = json.loads(msg.payload.decode())
-
-        # Optional: Nur ausführen, wenn bestimmte Keys vorhanden sind
-        if "lat_home" in payload and "lon_home" in payload and "home_radius" in payload:
-            print("→ Konfiguration aus Trigger empfangen, sende retained an googlefindmytools/config")
-
-            # An config-Topic weiterleiten (retain!)
-            client.publish("googlefindmytools/config", json.dumps(payload), retain=True)
-
-        else:
-            print("→ Kein gültiger Konfigurations-Payload – wird ignoriert.")
-
-    except json.JSONDecodeError:
-        print("→ Kein JSON – evtl. nur 'start' ohne Konfiguration")
-
-    # Skript immer starten, egal ob mit oder ohne Konfiguration
-    print("Running update_location.sh...")
-
-    try:
-        result = subprocess.run(
-            ["/home/admin/update_location.sh"],
-            capture_output=True,
-            text=True,
-            timeout=120
-        )
-        print(" STDOUT:\n", result.stdout)
-        print(" STDERR:\n", result.stderr)
-
-        now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        if result.returncode == 0:
-            status_msg = f" Standortdaten erfolgreich aktualisiert um {now}."
-        else:
-            status_msg = f" Fehler bei der Standortaktualisierung ({result.returncode}) um {now}.\n{result.stderr}"
-    except Exception as e:
-        import traceback
-        status_msg = f" Ausnahmefehler: {e}\n{traceback.format_exc()}"
-
-    client.publish("googlefindmytools/status", status_msg)
-
-
-
-client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
-client.username_pw_set(MQTT_USER, MQTT_PASS)
-client.on_connect = on_connect
-client.on_message = on_message
-
-
-client.connect(MQTT_BROKER, MQTT_PORT, 60)
-client.loop_forever()
 
 ```
 
@@ -325,10 +238,7 @@ Drücke STG+X, dann Y und Enter
 ```
 chmod +x mqtt_listener.py
 ```
-hiermit kann man den listener testen
-```
-python3 ~/mqtt_listener.py
-```
+
 
 <br><br><br>
 Abschließend müssen wir noch den Listener Service erstellen
@@ -340,20 +250,37 @@ hier muss folgendes hineinkopiert werden (Achtung User Verzeichnis anpassen, hie
 
 [Unit]
 Description=MQTT Listener for Google Find My Tools
+After=network-online.target
 Wants=network-online.target
-After=network.target
-#After=network-online.target
+StartLimitIntervalSec=60
+StartLimitBurst=5
 
 
 [Service]
-ExecStart=/home/admin/GoogleFindMyTools/venv/bin/python /home/admin/mqtt_listener.py
-WorkingDirectory=/home/admin
+#Type=simple
+User=admin
+WorkingDirectory=/home/admin/GoogleFindMyTools
+Environment="PATH=/home/admin/GoogleFindMyTools/venv/bin"
+#ExecStart=/home/admin/GoogleFindMyTools/venv/bin/python mqtt_listener.py
+ExecStart=/home/admin/GoogleFindMyTools/venv/bin/python /home/admin/GoogleFindMyTools/mqtt_listener.py
+
+# stderr ins Nichts leiten, stdout bleibt im Journal
+#StandardError=null
 StandardOutput=journal
 StandardError=journal
-#Restart=always
+
+# 🧹 Alte Subprozesse (z. B. nbe_list_devices.py) aufräumen
+ExecStopPost=/usr/bin/pkill -f nbe_list_devices.py
+
+# → Watchdog einschalten
+Type=notify
+WatchdogSec=30
+NotifyAccess=all
+
+# Fallback‑Restart, falls das Skript wirklich abstürzt
 Restart=on-failure
-User=admin
-Environment="PATH=/home/admin/GoogleFindMyTools/venv/bin"
+RestartSec=5
+
 
 [Install]
 WantedBy=multi-user.target
@@ -383,7 +310,15 @@ wenn man sich später die kommunikation mit HA anschauen möchte:
 ```
 cd /home/admin
 source ~/GoogleFindMyTools/venv/bin/activate
-python3 ~/mqtt_listener.py
+journalctl -u mqtt_listener.service -f
+
+```
+Str + c zum beenden
+
+wenn man später die kommunikation mit HA sehen möchte, einfach ein zweites Puttyfenster aufmachen und folgendes eingeben:
+user ip und password müssen natürlich die von deinem Broker (Home Assistant) sein
+```
+mosquitto_sub -h 192.168.1.100 -u DeinMqttUser -P DeinMqttPassword -v -t "homeassistant/#"
 ```
 Str + c zum beenden
 
