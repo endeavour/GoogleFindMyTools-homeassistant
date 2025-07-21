@@ -18,7 +18,7 @@ Python installieren: https://www.python.org/downloads/windows/
 
 Im Chromebrowser mit dem Nutzkonto einloggen. Wichtig: hiermit ist nicht die website von google.com gemeint, sondern das Chrome Desktop Programm!
 
-PowerShell als Admin ausführen und GoogleFindMyTools von leonboe1 installieren
+PowerShell als Admin ausführen und GoogleFindMyTools **<ins> von leonboe1 </ins>** installieren
 
 
 ```
