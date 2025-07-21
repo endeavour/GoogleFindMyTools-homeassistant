@@ -298,6 +298,32 @@ sudo systemctl enable mqtt_listener.service
 ```
 sudo systemctl start mqtt_listener.service
 ```
+Nun müssen wir noch einen Watchdog erstellen. Dies ist leider nur eine behälfsmäßige Lösung. Ich habe die Erfahrung gemacht, dass sich der update Service gerne aufhängt. Der Watchdoog schaut, ob der Updateprozess innnerhalb von 400 Sekunden fertig gemeldet hat. Ist es nicht der Fall, killt alles und startet es neu. 400s habe ich deshalb eingestellt, da Home Assistant alle 5 min einen Trigger schickt. Wenn Home Assistant seltener die Trigger sendet, sollte auch der Watchdog angepasst werden.
+
+Um den Watchdog zu starten
+```
+sudo apt install watchdog
+```
+```
+sudo systemctl enable watchdog
+```
+```
+sudo systemctl start watchdog
+```
+```
+sudo nano /etc/watchdog.conf
+```
+Aktiviere folgende Zeilen, indem du die Raute davor entfernst. Falls nicht vorhanden füge diese einfach hinzu.
+```
+watchdog-device = /dev/watchdog
+max-load-1 = 24
+temperature-device = /sys/class/thermal/thermal_zone0/temp
+max-temperature = 75000
+```
+```
+
+
+
 listener Service testen:
 ```
 sudo systemctl status mqtt_listener.service
@@ -361,7 +387,7 @@ alias: Google Tracker aktualisieren
 sequence:
   - data:
       topic: googlefindmytools/trigger/update
-      payload: "{ \"lat_home\": 31.8909528, \"lon_home\": 7.1904316, \"home_radius\": 500 }"
+      payload: "{ \"lat_home\": 31.8909428, \"lon_home\": 7.1704316, \"home_radius\": 500 }"
     action: mqtt.publish
 ```
 speichern und ausführen. Die Google Tags sollten nun in Home Assistan angezeigt werden. 
