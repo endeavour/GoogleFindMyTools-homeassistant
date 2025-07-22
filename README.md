@@ -416,9 +416,75 @@ speichern
 
 
 
-So fertig sind wir
+**So fertig sind wir**
 
 
+**kleines Extra:**
+Wer es noch brauchen kann hier sind drei Karten für das dashboard<br>
+Einfach in das Dashboard gehen, eine irgendeine neue Karte hinzufügen und auf "im Code Editor anzeigen" gehen.<br>
+Anschleißend folgenden code hinein kopieren und die Trackernamen (Airtag_1) anpassen<br>
+
+Hier eine Karte
+```
+type: map
+entities:
+  - device_tracker.Airtag_1
+  - device_tracker.Airtag_2
+  - device_tracker.Airtag_3
+default_zoom: 16
+hours_to_show: 1
+theme_mode: auto
+```
+
+Hier die Personen
+```
+type: tile
+features_position: bottom
+vertical: true
+entity: device_tracker.Airtag_1
+state_content:
+  - state
+  - last_changed
+  - semantic_location
+grid_options:
+  rows: 2
+  columns: 6
+```
+
+Hier als Markdown
+```
+type: markdown
+title: Google Airtag Status
+content: >
+  **Status:**    {{ states('device_tracker.Airtag_1') }}
+
+  **Letzter Wechsel:**  {% if states.device_tracker.naomi.last_changed %}{{
+  as_timestamp(states.device_tracker.naomi.last_changed)|
+  timestamp_custom('%Y-%m-%d %H:%M:%S') }}{% else %}–
+
+  {% endif %}
+
+  **Semantic Location:**    {{ state_attr('device_tracker.naomi',
+  'semantic_location') or '–' }}
+
+  **Letztes GPS‑Update:**    {{ state_attr('device_tracker.naomi',
+  'last_updated') or '–' }}
+grid_options:
+  columns: 9
+  rows: auto
+```
+```show_name: true
+show_icon: true
+type: button
+entity: automation.google_airtag
+tap_action:
+  action: perform-action
+  perform_action: automation.trigger
+  target:
+    entity_id: automation.google_airtag
+  data:
+    skip_condition: true
+```
 
 
-
+Viel Spaß damit 
