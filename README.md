@@ -473,6 +473,7 @@ grid_options:
   columns: 9
   rows: auto
 ```
+Ein Button zum manuellen aktualisieren der Tracker
 ```show_name: true
 show_icon: true
 type: button
