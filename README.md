@@ -377,11 +377,14 @@ Benutzername: DeinMqqtUser den du beim Raspberry verwendet hast in der mqtt_list
 Passwort: DeinMqttPasswort das du beim Raspberry verwendet hast in der mqtt_listener.py und in der publish_mqtt.py<br>
 
 <br><br><br><br>
-Nun erstellen wir den Aufruf zum Orten der Google Tags
-Einstellungen/Automatisierungen&Szenen/Skripte/ Neues Skript hinzufügen
+Nun erstellen wir den Aufruf zum Orten der Google Tags<br>
+Einstellungen/Automatisierungen&Szenen/Skripte/   hier auf den Button "+Skript erstellen" klicken und "Neues Skipt erstellen im Dialog auswählen<br>
+nun sind wir im Editor der GUI geführt ist. Um es uns leichter zu machen, klick oben rechts aud ie drei Punkt und wähle "in YAML bearbeiten" aus<br>
 
 
-Hier kannst du die Koordinaten und den Umkreis von deinem Zuhause definieren. Wenn nun der Google Tag anstatt von Koordinaten nur "Zuhause" meldet, wird dieses in Koordinaten umgewandelt, damit Home Assisant den Tracker anzeigen kann. 
+Hier kannst du die Koordinaten und den Umkreis von deinem Zuhause definieren. Wenn nun der Google Tag anstatt von Koordinaten nur "Zuhause" meldet, wird dieses in Koordinaten umgewandelt, damit Home Assisant den Tracker anzeigen kann.<br>
+Kopiere das Skript in den Editor 
+
 ```
 alias: Google Tracker aktualisieren
 sequence:
@@ -390,17 +393,18 @@ sequence:
       payload: "{ \"lat_home\": 31.8909428, \"lon_home\": 7.1704316, \"home_radius\": 500 }"
     action: mqtt.publish
 ```
-speichern und ausführen. Die Google Tags sollten nun in Home Assistan angezeigt werden. 
+speichern und ausführen. Die Google Tags sollten nun in Home Assistan angezeigt werden (Einstellungen/Geräte und Dienste/MQTT). 
 
-Zuletzt legen wir noch eine Automatisierung ab, um den Standort alle 15 min zu aktualisieren:
-Einstellungen/Automatisierungen&Szenen/ Automatisierung erstellen
-
+Zuletzt legen wir noch eine Automatisierung ab, um den Standort alle 5 min zu aktualisieren: <br>
+Einstellungen/Automatisierungen&Szenen/ auf den Button "+Automatisierung erstellen" klicken und "Neue Automation erstellen" auswählen<br>
+nun sind wir im Editor der GUI geführt ist. Um es uns leichter zu machen, klick oben rechts aud ie drei Punkt und wähle "in YAML bearbeiten" aus<br>
+Kopiere das Skript in den Editor <br>
 ```
 alias: Google_Airtag
 description: ""
 triggers:
   - trigger: time_pattern
-    minutes: /15
+    minutes: /5
 conditions: []
 actions:
   - action: script.update_google_locations
