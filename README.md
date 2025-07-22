@@ -458,16 +458,16 @@ title: Google Airtag Status
 content: >
   **Status:**    {{ states('device_tracker.Airtag_1') }}
 
-  **Letzter Wechsel:**  {% if states.device_tracker.naomi.last_changed %}{{
-  as_timestamp(states.device_tracker.naomi.last_changed)|
+  **Letzter Wechsel:**  {% if states.device_tracker.Airtag_1.last_changed %}{{
+  as_timestamp(states.device_tracker.Airtag_1.last_changed)|
   timestamp_custom('%Y-%m-%d %H:%M:%S') }}{% else %}–
 
   {% endif %}
 
-  **Semantic Location:**    {{ state_attr('device_tracker.naomi',
+  **Semantic Location:**    {{ state_attr('device_tracker.Airtag_1',
   'semantic_location') or '–' }}
 
-  **Letztes GPS‑Update:**    {{ state_attr('device_tracker.naomi',
+  **Letztes GPS‑Update:**    {{ state_attr('device_tracker.Airtag_1',
   'last_updated') or '–' }}
 grid_options:
   columns: 9
